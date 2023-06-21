@@ -1,0 +1,39 @@
+$Killtorrent="True" #set to true to stop any found software, false not to"
+
+$softwarelist = "azureus","uTorrent","WebTorrent","utorrentie","utweb","tixati","qtwebengineprocess","qbittorrent","bittorrentie","bitcomet","bitcometservice","biglybt","bitlord","bittorrent","Transmission-qt"
+$FoundTorrent=""
+
+
+$processlist = Get-Process
+
+
+foreach($softwarename in $softwarelist )
+{
+    if($processlist -match $softwarename)
+    {
+        if($FoundTorrent -eq "")
+        {
+            $FoundTorrent = $softwarename
+        }
+        else
+        {
+            $FoundTorrent = $FoundTorrent + ", " + $softwarename
+        }
+        if($Killtorrent -eq "True")
+        {
+            Stop-Process -Name $softwarename -Force
+        }
+
+        "Found: " + $softwarename
+    }
+    else
+    {
+       # "no"
+    }
+}
+
+if($FoundTorrent -eq "")
+{    
+    $FoundTorrent = "No Torrent Found"
+}
+$FoundTorrent
